@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Banque - Epimodsteam Bank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 95%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #000;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            color: #000;
+            font-size: 16px;
+            pointer-events: none;
+            text-align: center;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .keyboard-container {
+            margin-top: 30px;
+        }
+        
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .keyboard-key {
+            width: 70px;
+            height: 70px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        
+        .keyboard-key:hover {
+            background-color: #fa6721;
+            color: white;
+        }
+        
+        .keyboard-ok {
+            background-color: #fa6721;
+            color: white;
+        }
+        
+        .keyboard-ok:hover {
+            background-color: #e05a1a;
+        }
+        
+        .epimodsteam-pay-btn {
+            background-color: #062461;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px auto;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .epimodsteam-pay-btn:hover {
+            background-color: #1a3a8f;
+        }
+        
+        .nfc-logo {
+            width: 28px;
+            height: 28px;
+            background-image: url('https://epimodsteambank.wordpress.com/wp-content/uploads/2025/05/images-removebg-preview-fotor-20250506213853.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="https://epimodsteambank.wordpress.com/wp-content/uploads/2025/05/design-sans-titre1.png" alt="Epimodsteam Bank" class="logo">
+        <h1>Bienvenue</h1>
+        <form id="loginForm" method="post">
+            <div class="input-group">
+                <label for="username">Utilisateur</label>
+                <input type="text" id="username" name="username" value="******8" readonly required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Mot de Passe</label>
+                <input type="password" id="password" name="password" required readonly>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            
+            <button type="button" class="epimodsteam-pay-btn" onclick="window.location.href='payment.html'">
+                Epimodsteam Pay
+                <span class="nfc-logo" title="Paiement sans contact NFC"></span>
+            </button>
+        </form>
+
+        <div class="keyboard-container">
+            <div class="keyboard-row" id="keyboardRow1"></div>
+            <div class="keyboard-row" id="keyboardRow2"></div>
+            <div class="keyboard-row" id="keyboardRow3"></div>
+        </div>
+    </div>
+
+    <script>
+        let attempts = 0;
+        const maxAttempts = 3;
+        const lockoutTime = 5 * 60 * 1000; // 5 minutes
+        let autoSubmitTimer = null;
+        const correctUsername = "1735908";
+        const correctPassword = "070182";
+
+        // Génère un clavier numérique aléatoire
+        function generateNumericKeyboard() {
+            const numbers = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            
+            document.getElementById('keyboardRow1').innerHTML = 
+                numbers.slice(0, 4).map(num => 
+                    `<div class="keyboard-key" onclick="addToPassword(${num})">${num}</div>`
+                ).join('');
+            
+            document.getElementById('keyboardRow2').innerHTML = 
+                numbers.slice(4, 8).map(num => 
+                    `<div class="keyboard-key" onclick="addToPassword(${num})">${num}</div>`
+                ).join('');
+            
+            document.getElementById('keyboardRow3').innerHTML = `
+                <div class="keyboard-key" onclick="addToPassword(${numbers[8]})">${numbers[8]}</div>
+                <div class="keyboard-key" onclick="addToPassword(${numbers[9]})">${numbers[9]}</div>
+                <div class="keyboard-key" onclick="clearLastDigit()">⌫</div>
+                <div class="keyboard-key keyboard-ok" onclick="validatePassword()">OK</div>
+            `;
+        }
+
+        // Mélange un tableau
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Ajoute un chiffre au mot de passe
+        function addToPassword(num) {
+            const passwordInput = document.getElementById('password');
+            if (passwordInput.value.length < 6) {
+                passwordInput.value += num;
+                
+                // Validation automatique si 6 chiffres saisis
+                if (passwordInput.value.length === 6) {
+                    clearTimeout(autoSubmitTimer);
+                    autoSubmitTimer = setTimeout(validatePassword, 300);
+                }
+            }
+        }
+
+        // Efface le dernier chiffre
+        function clearLastDigit() {
+            const passwordInput = document.getElementById('password');
+            passwordInput.value = passwordInput.value.slice(0, -1);
+        }
+
+        // Valide le mot de passe
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+
+            if (attempts >= maxAttempts) {
+                showError('Trop de tentatives. Veuillez réessayer dans 5 minutes.');
+                setTimeout(() => {
+                    attempts = 0;
+                    clearError();
+                }, lockoutTime);
+                return;
+            }
+
+            if (password === correctPassword) {
+                window.location.href = "index.html";
+            } else {
+                attempts++;
+                showError(`Informations incorrectes (${attempts}/${maxAttempts} tentatives).`);
+                document.getElementById('password').value = '';
+                generateNumericKeyboard();
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        function clearError() {
+            document.getElementById('errorMessage').textContent = '';
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            generateNumericKeyboard();
+            
+            // Focus sur le champ mot de passe (même s'il est en readonly)
+            document.getElementById('password').focus();
+        });
+    </script>
+</body>
+</html>

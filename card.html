@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte Bancaire - Epimods Team Bank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #062461;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .card-container {
+            width: 100%;
+            max-width: 400px;
+            perspective: 1000px;
+            margin: 0 auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .bank-card {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            margin-bottom: 30px;
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #062461, #1a3a8f);
+            color: white;
+        }
+        
+        .card-front.locked {
+            background: linear-gradient(135deg, #888, #aaa);
+            color: #000;
+        }
+        
+        .card-back {
+            background: #ddd;
+            transform: rotateY(180deg);
+            display: none;
+        }
+        
+        .card-logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .bank-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .mastercard-logo {
+            width: 50px;
+            height: auto;
+        }
+        
+        .card-number {
+            font-size: 22px;
+            letter-spacing: 2px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .card-holder, .card-expiry {
+            font-size: 14px;
+        }
+        
+        .card-status {
+            margin: 30px auto;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+        
+        .status-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .status-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .status-message {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .badge-green {
+            background-color: #28a745;
+        }
+        
+        .badge-red {
+            background-color: #dc3545;
+        }
+        
+        .btn-toggle {
+            background-color: #fa6721;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto;
+            font-weight: bold;
+        }
+        
+        .btn-toggle:hover {
+            background-color: #e05a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #062461;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+        
+        .ip-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <!-- Carte Bancaire -->
+        <div class="bank-card">
+            <div class="card-front" id="cardFront">
+                <div class="card-logo">
+                    <div class="bank-name">Epimodsteam Bank</div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="mastercard-logo" alt="Mastercard">
+                </div>
+                <div class="card-number">•••• •••• •••• 8793</div>
+                <div class="card-footer">
+                    <div class="card-holder">BOULIF RAYANE</div>
+                    <div class="card-expiry">12/26</div>
+                </div>
+            </div>
+            <div class="card-back">
+                <!-- Dos de la carte -->
+            </div>
+        </div>
+        
+        <!-- Statut de la carte -->
+        <div class="card-status">
+            <div class="status-title">Statut de la carte</div>
+            <div class="status-container">
+                <div class="status-message" id="statusMessage">Carte débloquée</div>
+                <div class="status-badge badge-green" id="statusBadge">ACTIVE</div>
+            </div>
+            <button class="btn-toggle" id="toggleBtn">Bloquer la carte</button>
+            <div class="ip-info" id="ipInfo"></div>
+        </div>
+        
+        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+    </div>
+
+    <div class="footer">
+        © 2020 Epimodsteam Bank. Tous droits réservés.
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('toggleBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const statusBadge = document.getElementById('statusBadge');
+        const cardFront = document.getElementById('cardFront');
+        const ipInfo = document.getElementById('ipInfo');
+        
+        // Récupérer l'adresse IP (simulée ici)
+        function getIP() {
+            // En production, vous utiliseriez un service d'API IP réel
+            return localStorage.getItem('userIP') || generateRandomIP();
+        }
+        
+        function generateRandomIP() {
+            const ip = `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+            localStorage.setItem('userIP', ip);
+            return ip;
+        }
+        
+        // Vérifier l'état sauvegardé pour cette IP
+        function getSavedState(ip) {
+            const savedState = localStorage.getItem(`cardState_${ip}`);
+            return savedState ? JSON.parse(savedState) : { isLocked: false };
+        }
+        
+        // Sauvegarder l'état
+        function saveState(ip, isLocked) {
+            localStorage.setItem(`cardState_${ip}`, JSON.stringify({ isLocked }));
+        }
+        
+        // Initialisation
+        const userIP = getIP();
+        let savedState = getSavedState(userIP);
+        let isLocked = savedState.isLocked;
+        
+        // Mettre à jour l'interface en fonction de l'état initial
+        updateUI();
+        
+        function updateUI() {
+            if (isLocked) {
+                statusMessage.textContent = "Carte bloquée";
+                statusBadge.textContent = "BLOQUÉE";
+                statusBadge.className = "status-badge badge-red";
+                toggleBtn.textContent = "Débloquer la carte";
+                cardFront.classList.add('locked');
+            } else {
+                statusMessage.textContent = "Carte débloquée";
+                statusBadge.textContent = "ACTIVE";
+                statusBadge.className = "status-badge badge-green";
+                toggleBtn.textContent = "Bloquer la carte";
+                cardFront.classList.remove('locked');
+            }
+        }
+        
+        toggleBtn.addEventListener('click', function() {
+            isLocked = !isLocked;
+            saveState(userIP, isLocked);
+            updateUI();
+            
+            // Animation de feedback
+            toggleBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                toggleBtn.style.transform = 'scale(1)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

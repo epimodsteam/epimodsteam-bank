@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - Epimods Team Bank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .card-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Style de la carte bancaire */
+        .bank-card {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #062461, #1a3a8f);
+            border-radius: 15px;
+            color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-number {
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* Section de paiement */
+        .payment-section {
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        .btn-pay {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .btn-pay:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Code verification */
+        .code-verification {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .code-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        /* Animation de paiement */
+        .payment-animation {
+            margin: 30px auto;
+            text-align: center;
+            display: none;
+        }
+        
+        .animation-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        
+        .animation-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #f1f1f1;
+            border-top-color: #28a745;
+            animation: spin 1s linear infinite;
+        }
+        
+        .symbols-in-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 15px;
+        }
+        
+        .symbol {
+            font-size: 20px;
+            color: #d3d3d3;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Résultats */
+        .result-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .result-icon {
+            font-size: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+        }
+        
+        .failure-icon {
+            background-color: #dc3545;
+        }
+        
+        .success-icon {
+            background-color: #28a745;
+        }
+        
+        .btn-close {
+            background-color: #062461;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #062461;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Clavier numérique */
+        .keyboard-container {
+            margin-top: 20px;
+        }
+        
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .keyboard-key {
+            width: 70px;
+            height: 70px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        
+        .keyboard-key:hover {
+            background-color: #ddd;
+        }
+        
+        .keyboard-ok {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <!-- Carte bancaire -->
+        <div class="bank-card">
+            <div class="card-header">
+                <div class="bank-name">Epimodsteam Bank</div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" width="50" alt="Mastercard">
+            </div>
+            <div class="card-number">•••• •••• •••• 8793</div>
+            <div class="card-footer">
+                <div class="card-holder">BOULIF RAYANE</div>
+                <div class="card-expiry">12/26</div>
+            </div>
+        </div>
+        
+        <!-- Section de paiement -->
+        <div class="payment-section">
+            <div style="font-size: 24px; margin-bottom: 20px; color: #333;">Paiement en ligne</div>
+            <button class="btn-pay" id="payBtn">Payer avec la carte</button>
+            
+            <!-- Vérification du code -->
+            <div class="code-verification" id="codeVerification">
+                <div style="font-weight: bold; margin-bottom: 15px;">Entrez votre code de sécurité</div>
+                <input type="password" class="code-input" id="securityCode" placeholder="Code à 4 chiffres" maxlength="4">
+                <div class="error-message" id="errorMessage">Code incorrect</div>
+                <div class="keyboard-container" id="keyboardContainer"></div>
+            </div>
+            
+            <div class="payment-animation" id="paymentAnimation">
+                <div class="animation-container">
+                    <div class="animation-circle"></div>
+                    <div class="symbols-in-circle">
+                        <div class="symbol" id="dotSymbol">.</div>
+                        <div class="symbol" id="atSymbol">@</div>
+                    </div>
+                </div>
+                <div>Traitement du paiement...</div>
+            </div>
+            
+            <!-- Message d'échec -->
+            <div class="result-container" id="failureResult">
+                <div class="result-icon failure-icon">✕</div>
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">Votre paiement ne peut pas être traité car vous n'êtes pas aux États-Unis.</div>
+                <button class="btn-close" id="closeFailure">Fermer</button>
+            </div>
+            
+            <!-- Message de succès -->
+            <div class="result-container" id="successResult">
+                <div class="result-icon success-icon">✓</div>
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">Votre paiement a été effectué avec succès !</div>
+                <button class="btn-close" id="closeSuccess">Fermer</button>
+            </div>
+        </div>
+        
+        <a href="login.html" class="btn-back">← Retour à la page de connexion</a>
+    </div>
+
+    <div class="footer">
+        © 2020 Epimodsteam Bank. Tous droits réservés.
+    </div>
+
+    <script>
+        const payBtn = document.getElementById('payBtn');
+        const codeVerification = document.getElementById('codeVerification');
+        const securityCode = document.getElementById('securityCode');
+        const errorMessage = document.getElementById('errorMessage');
+        const keyboardContainer = document.getElementById('keyboardContainer');
+        const paymentAnimation = document.getElementById('paymentAnimation');
+        const dotSymbol = document.getElementById('dotSymbol');
+        const atSymbol = document.getElementById('atSymbol');
+        const failureResult = document.getElementById('failureResult');
+        const successResult = document.getElementById('successResult');
+        const closeFailure = document.getElementById('closeFailure');
+        const closeSuccess = document.getElementById('closeSuccess');
+        
+        const CORRECT_CODE = "5202";
+        
+        // Générer le clavier numérique
+        function generateKeyboard() {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+            let keyboardHTML = '';
+            
+            // Première ligne
+            keyboardHTML += '<div class="keyboard-row">';
+            for (let i = 0; i < 3; i++) {
+                keyboardHTML += `<div class="keyboard-key" onclick="addCodeDigit(${numbers[i]})">${numbers[i]}</div>`;
+            }
+            keyboardHTML += '</div>';
+            
+            // Deuxième ligne
+            keyboardHTML += '<div class="keyboard-row">';
+            for (let i = 3; i < 6; i++) {
+                keyboardHTML += `<div class="keyboard-key" onclick="addCodeDigit(${numbers[i]})">${numbers[i]}</div>`;
+            }
+            keyboardHTML += '</div>';
+            
+            // Troisième ligne
+            keyboardHTML += '<div class="keyboard-row">';
+            for (let i = 6; i < 9; i++) {
+                keyboardHTML += `<div class="keyboard-key" onclick="addCodeDigit(${numbers[i]})">${numbers[i]}</div>`;
+            }
+            keyboardHTML += '</div>';
+            
+            // Quatrième ligne
+            keyboardHTML += '<div class="keyboard-row">';
+            keyboardHTML += '<div class="keyboard-key" onclick="addCodeDigit(0)">0</div>';
+            keyboardHTML += '<div class="keyboard-key" onclick="clearCodeDigit()">⌫</div>';
+            keyboardHTML += '<div class="keyboard-key keyboard-ok" onclick="verifyCode()">OK</div>';
+            keyboardHTML += '</div>';
+            
+            keyboardContainer.innerHTML = keyboardHTML;
+        }
+        
+        // Ajouter un chiffre au code
+        function addCodeDigit(digit) {
+            if (securityCode.value.length < 4) {
+                securityCode.value += digit;
+                errorMessage.style.display = 'none';
+                
+                // Vérification automatique après 4 chiffres
+                if (securityCode.value.length === 4) {
+                    verifyCode();
+                }
+            }
+        }
+        
+        // Effacer un chiffre
+        function clearCodeDigit() {
+            securityCode.value = securityCode.value.slice(0, -1);
+            errorMessage.style.display = 'none';
+        }
+        
+        // Vérifier le code
+        function verifyCode() {
+            if (securityCode.value === CORRECT_CODE) {
+                codeVerification.style.display = 'none';
+                paymentAnimation.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'block';
+                securityCode.value = '';
+            }
+        }
+        
+        // Initialisation
+        payBtn.addEventListener('click', function() {
+            payBtn.style.display = 'none';
+            codeVerification.style.display = 'block';
+            securityCode.value = '';
+            errorMessage.style.display = 'none';
+            generateKeyboard();
+            securityCode.focus();
+        });
+        
+        dotSymbol.addEventListener('click', function() {
+            paymentAnimation.style.display = 'none';
+            failureResult.style.display = 'block';
+        });
+        
+        atSymbol.addEventListener('click', function() {
+            paymentAnimation.style.display = 'none';
+            successResult.style.display = 'block';
+        });
+        
+        closeFailure.addEventListener('click', function() {
+            failureResult.style.display = 'none';
+            payBtn.style.display = 'block';
+        });
+        
+        closeSuccess.addEventListener('click', function() {
+            successResult.style.display = 'none';
+            payBtn.style.display = 'block';
+        });
+        
+        // Permettre la saisie clavier
+        securityCode.addEventListener('input', function() {
+            if (this.value.length === 4) {
+                verifyCode();
+            }
+        });
+    </script>
+</body>
+</html>

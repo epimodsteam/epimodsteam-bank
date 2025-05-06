@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demander de l'argent - Epimodsteam Bank</title>
+    
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Style cohérent avec le thème -->
+    <style>
+        :root {
+            --primary-color: #fb6721; /* Orange Epimodsteam */
+            --secondary-color: #062461; /* Bleu foncé */
+            --accent-color: #28a745; /* Vert */
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--secondary-color);
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--primary-color);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        
+        /* Header cohérent avec les autres pages */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), #1a3a8f);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Carte de formulaire */
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            margin: 40px auto;
+            max-width: 500px;
+            border-left: 4px solid var(--primary-color);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(251, 103, 33, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: #e05d1d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 103, 33, 0.3);
+        }
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Bouton Retour */
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin: 40px auto;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 30px;
+            background-color: #f0f0f0;
+            transition: var(--transition);
+            max-width: 200px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn-back:hover {
+            text-decoration: none;
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        /* Footer avec droits réservés */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .copyright {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Message de confirmation */
+        .confirmation-message {
+            display: none;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header cohérent avec les autres pages -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Epimodsteam Bank</a>
+            <nav>
+                <!-- Navigation optionnelle -->
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1>Demander de l'argent</h1>
+        
+        <div class="form-card">
+            <form id="demande-form">
+                <div class="form-group">
+                    <label for="montant">Montant à demander (€)</label>
+                    <input type="number" id="montant" class="form-control" placeholder="Entrez le montant" required>
+                </div>
+                
+                <button type="submit" class="btn">Demander</button>
+                
+                <div id="confirmation-message" class="confirmation-message">
+                    Votre demande a été envoyée avec succès !
+                </div>
+            </form>
+        </div>
+        
+        <!-- Bouton Retour -->
+        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+    </div>
+    
+    <!-- Footer avec droits réservés -->
+    <footer>
+        <div class="footer-content">
+            <a href="index.html" class="logo">Epimodsteam Bank</a>
+            <div class="copyright">Tous droits réservés © 2020</div>
+        </div>
+    </footer>
+    
+    <script>
+        document.getElementById('demande-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const montant = document.getElementById('montant').value;
+            
+            if (montant && !isNaN(montant)) {
+                // Afficher le message de confirmation
+                const confirmation = document.getElementById('confirmation-message');
+                confirmation.style.display = 'block';
+                
+                // Réinitialiser le formulaire
+                document.getElementById('montant').value = '';
+                
+                // Masquer le message après 5 secondes
+                setTimeout(() => {
+                    confirmation.style.display = 'none';
+                }, 5000);
+            } else {
+                alert("Veuillez entrer un montant valide");
+            }
+        });
+    </script>
+</body>
+</html>

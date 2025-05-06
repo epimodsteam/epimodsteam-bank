@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Services Entreprise - Epimodsteam Bank</title>
+    
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Style amélioré -->
+    <style>
+        :root {
+            --primary-color: #fb6721; /* Orange Epimodsteam */
+            --secondary-color: #062461; /* Bleu foncé */
+            --accent-color: #28a745; /* Vert */
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--secondary-color);
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--primary-color);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            transform: translateY(0);
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+            min-height: 200px; /* Hauteur minimale pour uniformiser */
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .service-card h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+        }
+        
+        .service-card p {
+            color: #666;
+            margin-bottom: 40px; /* Espace pour le badge */
+        }
+        
+        .service-status {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .service-card {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        /* Délais d'animation pour chaque carte */
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* Header cohérent avec les autres pages */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), #1a3a8f);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Bouton Retour comme dans card.html */
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin: 40px auto;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 30px;
+            background-color: #f0f0f0;
+            transition: var(--transition);
+            max-width: 200px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn-back:hover {
+            text-decoration: none;
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        /* Footer avec droits réservés */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .copyright {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header cohérent avec les autres pages -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Epimodsteam Bank</a>
+            <nav>
+                <!-- Ajoutez ici votre navigation si nécessaire -->
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1>Nos services pour entreprise</h1>
+        
+        <div class="services-container">
+            <div class="service-card">
+                <h3>Financement pour fournir un lieu de travail</h3>
+                <p>Solutions de financement adaptées à vos besoins immobiliers professionnels.</p>
+                <span class="service-status">Vous possédez déjà ce service</span>
+            </div>
+            
+            <div class="service-card">
+                <h3>Documents administratifs</h3>
+                <p>Gestion et archivage sécurisé de tous vos documents administratifs.</p>
+                <span class="service-status">Vous possédez déjà ce service</span>
+            </div>
+            
+            <div class="service-card">
+                <h3>Création de l'entreprise/facture</h3>
+                <p>Accompagnement pour la création d'entreprise et gestion des factures.</p>
+                <span class="service-status">Vous possédez déjà ce service</span>
+            </div>
+            
+            <div class="service-card">
+                <h3>Numéro professionnel</h3>
+                <p>Obtention et gestion de votre numéro professionnel.</p>
+                <span class="service-status">Vous possédez déjà ce service</span>
+            </div>
+            
+            <div class="service-card">
+                <h3>Taxe/TVA</h3>
+                <p>Gestion et optimisation de vos obligations fiscales.</p>
+                <span class="service-status">Vous possédez déjà ce service</span>
+            </div>
+        </div>
+        
+        <!-- Bouton Retour comme dans card.html -->
+        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+    </div>
+    
+    <!-- Footer avec droits réservés -->
+    <footer>
+        <div class="footer-content">
+            <a href="index.html" class="logo">Epimodsteam Bank</a>
+            <div class="copyright">Tous droits réservés © 2020</div>
+        </div>
+    </footer>
+    
+    <script>
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.service-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

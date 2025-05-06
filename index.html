@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - Epimodsteam Bank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .dashboard {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .welcome {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #0080ff;
+            font-weight: bold;
+        }
+        .balance {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fb6721;
+            margin: 20px 0;
+        }
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+        .button-row {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        .button {
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        .button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        .button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .menu-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            width: 200px;
+            display: none;
+            z-index: 10;
+        }
+        .menu-item {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .menu-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        /* Styles pour les modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .pin-display {
+            font-size: 24px;
+            margin: 20px 0;
+            min-height: 36px;
+            color: #000;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+        
+        .info-display {
+            font-size: 18px;
+            margin: 20px 0;
+            color: #000;
+            font-weight: bold;
+            word-break: break-word;
+        }
+        
+        .rib-display {
+            font-size: 16px;
+            margin: 20px 0;
+            color: #000;
+            font-weight: bold;
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+        
+        .pin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .pin-key {
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            user-select: none;
+            color: #000;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .pin-key:hover {
+            background: #fb6721;
+            color: white;
+        }
+        
+        .pin-cancel {
+            background-color: #fb6721;
+            color: white;
+        }
+        
+        .pin-cancel:hover {
+            background-color: #e05a1a;
+        }
+        
+        .btn-close {
+            background-color: #fb6721;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-close:hover {
+            background-color: #e05a1a;
+        }
+        
+        /* Page 404 */
+        .error-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        
+        .error-404 {
+            color: #dc3545;
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .btn-home {
+            background-color: #fb6721;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-home:hover {
+            background-color: #e05a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <button class="menu-button">☰</button>
+        <div class="menu">
+            <div class="menu-item" id="pinItem">Demander ton PIN</div>
+            <div class="menu-item" id="idItem">Demander ID</div>
+            <div class="menu-item" id="ribItem">Demander RIB</div>
+            <div class="menu-item" id="assistantItem">Assistant</div>
+            <div class="menu-item" id="facturesItem">Payer vos factures</div>
+        </div>
+
+        <div class="header">
+            <div class="welcome">Bienvenue Mr.Boulif Rayane</div>
+            <div>Votre solde est :</div>
+            <div class="balance">131 000 USD</div>
+        </div>
+        
+        <div class="buttons-container">
+            <div class="button-row">
+                <div class="button" onclick="window.location.href='card.html'">
+                    <img src="https://epimodsteambank.wordpress.com/wp-content/uploads/2025/05/cartes.jpeg" alt="Cartes">
+                </div>
+                <div class="button" onclick="window.location.href='pret.html'">
+                    <img src="https://epimodsteambank.wordpress.com/wp-content/uploads/2025/05/prets.jpeg" alt="Prêts">
+                </div>
+            </div>
+            
+            <div class="button-row">
+                <div class="button" onclick="window.location.href='entreprise.html'">
+                    <img src="https://epimodsteambank.wordpress.com/wp-content/uploads/2025/05/service-pour-entreprise.png" alt="Service">
+                </div>
+                <div class="button" onclick="window.location.href='echange.html'">
+                    <img src="https://epimodsteambank.wordpress.com/wp-content/uploads/2025/05/design-sans-titre.png" alt="Échange">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal pour le PIN -->
+    <div class="modal" id="pinModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Entrez votre mot de passe</h2>
+            <div class="pin-display" id="enteredPin"></div>
+            
+            <div class="pin-grid" id="pinGrid"></div>
+        </div>
+    </div>
+    
+    <!-- Modal pour le résultat PIN -->
+    <div class="modal" id="pinResultModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Votre code PIN</h2>
+            <div class="info-display">5202</div>
+            <button class="btn-close" onclick="closeModal('pinResultModal')">Fermer</button>
+        </div>
+    </div>
+    
+    <!-- Modal pour l'ID -->
+    <div class="modal" id="idModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Entrez votre mot de passe</h2>
+            <div class="pin-display" id="enteredIdPin"></div>
+            
+            <div class="pin-grid" id="idPinGrid"></div>
+        </div>
+    </div>
+    
+    <!-- Modal pour le résultat ID -->
+    <div class="modal" id="idResultModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Votre identifiant</h2>
+            <div class="info-display">1735908</div>
+            <button class="btn-close" onclick="closeModal('idResultModal')">Fermer</button>
+        </div>
+    </div>
+    
+    <!-- Modal pour le RIB -->
+    <div class="modal" id="ribModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Entrez votre mot de passe</h2>
+            <div class="pin-display" id="enteredRibPin"></div>
+            
+            <div class="pin-grid" id="ribPinGrid"></div>
+        </div>
+    </div>
+    
+    <!-- Modal pour le résultat RIB -->
+    <div class="modal" id="ribResultModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Votre RIB</h2>
+            <div class="rib-display">330 777 284017305993540142</div>
+            <button class="btn-close" onclick="closeModal('ribResultModal')">Fermer</button>
+        </div>
+    </div>
+    
+    <!-- Page 404 (cachée par défaut) -->
+    <div id="errorPage" style="display:none;">
+        <div class="error-container">
+            <div class="error-404">404</div>
+            <div class="error-message">Page non trouvée</div>
+            <a href="index.html" class="btn-home">Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <script>
+        const menuButton = document.querySelector('.menu-button');
+        const menu = document.querySelector('.menu');
+        const pinItem = document.getElementById('pinItem');
+        const idItem = document.getElementById('idItem');
+        const ribItem = document.getElementById('ribItem');
+        const assistantItem = document.getElementById('assistantItem');
+        const facturesItem = document.getElementById('facturesItem');
+        const errorPage = document.getElementById('errorPage');
+        
+        const secretCode = '070182'; // Code secret commun
+        
+        // Gestion du menu
+        menuButton.addEventListener('click', () => {
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        document.addEventListener('click', function(event) {
+            if (!menu.contains(event.target) && event.target !== menuButton) {
+                menu.style.display = 'none';
+            }
+        });
+        
+        // Fonctions communes
+        function generatePinGrid(containerId, displayId) {
+            const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            
+            // Shuffle array
+            for (let i = numbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+            }
+            
+            const pinGrid = document.getElementById(containerId);
+            pinGrid.innerHTML = '';
+            
+            const gridNumbers = [
+                numbers[0], numbers[1], numbers[2],
+                numbers[3], numbers[4], numbers[5],
+                numbers[6], numbers[7], numbers[8],
+                '✕', numbers[9], '⌫'
+            ];
+            
+            gridNumbers.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'pin-key';
+                
+                if (item === '✕') {
+                    cell.className += ' pin-cancel';
+                    cell.textContent = item;
+                    cell.addEventListener('click', () => {
+                        document.querySelector(`#${containerId}`).closest('.modal').style.display = 'none';
+                    });
+                } else if (item === '⌫') {
+                    cell.textContent = item;
+                    cell.addEventListener('click', () => {
+                        const display = document.getElementById(displayId);
+                        display.textContent = display.textContent.slice(0, -1);
+                    });
+                } else {
+                    cell.textContent = item;
+                    cell.addEventListener('click', () => {
+                        const display = document.getElementById(displayId);
+                        if (display.textContent.length < 6) {
+                            display.textContent += '*';
+                            
+                            if (display.textContent.length === 6) {
+                                validatePassword(displayId, containerId.includes('pin') ? 'pinResultModal' : 
+                                    containerId.includes('id') ? 'idResultModal' : 'ribResultModal');
+                            }
+                        }
+                    });
+                }
+                
+                pinGrid.appendChild(cell);
+            });
+        }
+        
+        function validatePassword(displayId, resultModalId) {
+            const enteredPin = document.getElementById(displayId).textContent;
+            const modal = document.querySelector(`#${displayId}`).closest('.modal');
+            
+            if (enteredPin === '******') { // Le mot de passe est 070182
+                modal.style.display = 'none';
+                document.getElementById(resultModalId).style.display = 'flex';
+                document.getElementById(displayId).textContent = '';
+            } else {
+                alert('Code incorrect');
+                document.getElementById(displayId).textContent = '';
+                generatePinGrid(displayId.replace('entered', '').replace('Pin', 'Grid'), displayId);
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Gestion des clics sur les items du menu
+        pinItem.addEventListener('click', () => {
+            document.getElementById('pinModal').style.display = 'flex';
+            document.getElementById('enteredPin').textContent = '';
+            generatePinGrid('pinGrid', 'enteredPin');
+        });
+        
+        idItem.addEventListener('click', () => {
+            document.getElementById('idModal').style.display = 'flex';
+            document.getElementById('enteredIdPin').textContent = '';
+            generatePinGrid('idPinGrid', 'enteredIdPin');
+        });
+        
+        ribItem.addEventListener('click', () => {
+            document.getElementById('ribModal').style.display = 'flex';
+            document.getElementById('enteredRibPin').textContent = '';
+            generatePinGrid('ribPinGrid', 'enteredRibPin');
+        });
+        
+        // Fermer les modals quand on clique à l'extérieur
+        window.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                // Réinitialiser les affichages
+                document.getElementById('enteredPin').textContent = '';
+                document.getElementById('enteredIdPin').textContent = '';
+                document.getElementById('enteredRibPin').textContent = '';
+            }
+        });
+        
+        // Redirection vers page 404 pour Assistant et Factures
+        assistantItem.addEventListener('click', redirectTo404);
+        facturesItem.addEventListener('click', redirectTo404);
+        
+        function redirectTo404() {
+            document.body.innerHTML = errorPage.innerHTML;
+            errorPage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

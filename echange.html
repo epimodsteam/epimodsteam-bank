@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertisseur USD/MAD - Epimodsteam Bank</title>
+    
+    <!-- Polices Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Style avec le thème demandé -->
+    <style>
+        :root {
+            --primary-color: #fb6721; /* Orange Epimodsteam */
+            --secondary-color: #062461; /* Bleu foncé */
+            --accent-color: #28a745; /* Vert */
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), #1a3a8f);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        h1:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--primary-color);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        
+        .converter-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .currency-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .currency-item strong {
+            min-width: 120px;
+            display: inline-block;
+        }
+        
+        .input-field {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(251, 103, 33, 0.2);
+        }
+        
+        .input-field:disabled {
+            background-color: #f5f5f5;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .rate-info {
+            font-style: italic;
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+            margin: 30px 0;
+            border: none;
+        }
+        
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin: 40px auto 0;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 30px;
+            background-color: #f0f0f0;
+            transition: var(--transition);
+            max-width: 200px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn-back:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 60px;
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header cohérent avec les autres pages -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Epimodsteam Bank</a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1>Convertisseur de Devises</h1>
+        
+        <!-- Convertisseur USD vers MAD -->
+        <div class="converter-section">
+            <h2>USD vers MAD</h2>
+            <div class="currency-item">
+                <strong>Montant en USD</strong>
+                <input type="number" class="input-field" id="usd-amount" placeholder="Entrez le montant" oninput="convert('usd', 'mad')">
+            </div>
+            <div class="currency-item">
+                <strong>Montant en MAD</strong>
+                <input type="text" class="input-field" id="mad-amount" disabled>
+            </div>
+            <div class="rate-info">Taux actuel: 1 USD = 10.00 MAD</div>
+        </div>
+        
+        <hr class="divider">
+        
+        <!-- Convertisseur MAD vers USD -->
+        <div class="converter-section">
+            <h2>MAD vers USD</h2>
+            <div class="currency-item">
+                <strong>Montant en MAD</strong>
+                <input type="number" class="input-field" id="mad-amount2" placeholder="Entrez le montant" oninput="convert('mad', 'usd')">
+            </div>
+            <div class="currency-item">
+                <strong>Montant en USD</strong>
+                <input type="text" class="input-field" id="usd-amount2" disabled>
+            </div>
+            <div class="rate-info">Taux actuel: 1 MAD = 0.10 USD</div>
+        </div>
+        
+        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="copyright">© 2020 Epimodsteam Bank. Tous droits réservés.</div>
+        </div>
+    </footer>
+    
+    <script>
+        // Taux de change fixe (1 USD = 10 MAD)
+        const exchangeRate = 10.0;
+        
+        // Fonction de conversion
+        function convert(from, to) {
+            const fromAmount = document.getElementById(`${from}-amount`).value;
+            const toField = document.getElementById(`${to}-amount`);
+            
+            if (fromAmount && !isNaN(fromAmount)) {
+                let result;
+                if (from === 'usd') {
+                    result = parseFloat(fromAmount) * exchangeRate;
+                } else {
+                    result = parseFloat(fromAmount) / exchangeRate;
+                }
+                
+                toField.value = result.toFixed(2);
+            } else {
+                toField.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
